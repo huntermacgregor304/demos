@@ -1,0 +1,46 @@
+{
+  "kind": "youtube#commentThreadListResponse",
+  "etag": "mock-comments",
+  "items": [
+    {
+      "kind": "youtube#commentThread",
+      "etag": "thread-1",
+      "id": "thread-mock-1",
+      "snippet": {
+        "videoId": "mockvideo01",
+        "totalReplyCount": 96,
+        "topLevelComment": {
+          "kind": "youtube#comment",
+          "etag": "comment-1",
+          "id": "Ucmockcomment1",
+          "snippet": {
+            "authorDisplayName": "Devon Park",
+            "textDisplay": "The upper looks great but this foam recipe went flat on the last Orbit model inside a week. Has anyone put real miles on these yet?",
+            "textOriginal": "The upper looks great but this foam recipe went flat on the last Orbit model inside a week. Has anyone put real miles on these yet?",
+            "likeCount": 842,
+            "publishedAt": "2026-10-21T18:04:00Z"
+          }
+        }
+      }
+    },
+    {
+      "kind": "youtube#commentThread",
+      "etag": "thread-html",
+      "id": "thread-mock-2",
+      "snippet": {
+        "videoId": "mockvideo01",
+        "totalReplyCount": 3,
+        "topLevelComment": {
+          "kind": "youtube#comment",
+          "id": "Ucmockcomment2",
+          "snippet": {
+            "authorDisplayName": "Sam Irie",
+            "textDisplay": "Colorway is &amp; loud &lt;3",
+            "likeCount": 12,
+            "publishedAt": "2026-10-21T19:00:00Z"
+          }
+        }
+      }
+    }
+  ]
+}

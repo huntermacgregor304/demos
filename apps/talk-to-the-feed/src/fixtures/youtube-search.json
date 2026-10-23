@@ -1,0 +1,50 @@
+{
+  "kind": "youtube#searchListResponse",
+  "etag": "mock-search",
+  "items": [
+    {
+      "kind": "youtube#searchResult",
+      "etag": "mock-video",
+      "id": { "kind": "youtube#video", "videoId": "mockvideo01" },
+      "snippet": {
+        "publishedAt": "2026-10-20T15:00:00Z",
+        "channelTitle": "Mock Runner",
+        "title": "Orbit Sneakers — first look (mock)",
+        "description": "A fictional first-look video used by the Talk to the Feed mock session.",
+        "thumbnails": {
+          "default": { "url": "/mock/sneaker.svg", "width": 120, "height": 90 },
+          "medium": { "url": "/mock/sneaker.svg", "width": 320, "height": 180 }
+        }
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "etag": "channel-row",
+      "id": { "kind": "youtube#channel", "channelId": "channel-should-skip" },
+      "snippet": { "title": "Not a video", "thumbnails": {} }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "etag": "extra-1",
+      "id": { "kind": "youtube#video", "videoId": "mockvideo02" },
+      "snippet": {
+        "publishedAt": "2026-10-18T12:00:00Z",
+        "channelTitle": "Mock Runner",
+        "title": "Orbit Sneakers unboxed (mock)",
+        "thumbnails": { "medium": { "url": "/mock/sole.svg" } }
+      }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "etag": "extra-2",
+      "id": { "kind": "youtube#video", "videoId": "mockvideo03" },
+      "snippet": { "title": "Third mock video", "thumbnails": { "default": { "url": "/mock/sole.svg" } } }
+    },
+    {
+      "kind": "youtube#searchResult",
+      "etag": "extra-3",
+      "id": { "kind": "youtube#video", "videoId": "mockvideo04" },
+      "snippet": { "title": "Fourth video should be trimmed", "thumbnails": {} }
+    }
+  ]
+}
