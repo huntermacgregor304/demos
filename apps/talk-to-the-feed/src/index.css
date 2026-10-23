@@ -1,0 +1,93 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Figtree", "Avenir Next", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Fraunces", "Iowan Old Style", Palatino, Georgia, serif;
+  --color-background: #0c0d0b;
+  --color-foreground: #f4f1ea;
+  --color-card: #15160f;
+  --color-card-foreground: #f4f1ea;
+  --color-popover: #1c1d16;
+  --color-popover-foreground: #f4f1ea;
+  --color-primary: #e7ff3d;
+  --color-primary-foreground: #17180d;
+  --color-secondary: #24251c;
+  --color-secondary-foreground: #f4f1ea;
+  --color-muted: #1c1d18;
+  --color-muted-foreground: #a39e93;
+  --color-accent: #2a2b22;
+  --color-accent-foreground: #f4f1ea;
+  --color-destructive: #ff7a6e;
+  --color-border: #313228;
+  --color-input: #313228;
+  --color-ring: #e7ff3d;
+  --radius-lg: 0.9rem;
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(980px 420px at 78% -12%, rgb(231 255 61 / 0.09), transparent 58%),
+    var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+
+@keyframes cite-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pulse-ring {
+  0% {
+    transform: scale(1);
+    opacity: 0.55;
+  }
+  100% {
+    transform: scale(1.45);
+    opacity: 0;
+  }
+}
+
+@keyframes bar {
+  0%,
+  100% {
+    transform: scaleY(0.35);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+.cite-in {
+  animation: cite-in 360ms ease;
+}
+
+.pulse-ring {
+  animation: pulse-ring 1.4s ease-out infinite;
+}
+
+.eq-bar {
+  transform-origin: center;
+  animation: bar 0.9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cite-in,
+  .pulse-ring,
+  .eq-bar {
+    animation: none;
+  }
+}
