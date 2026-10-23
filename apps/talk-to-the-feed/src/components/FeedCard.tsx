@@ -38,9 +38,13 @@ export function FeedCardView({
       }`}
     >
       <div className="mb-3 flex items-start gap-3">
-        <div className="grid size-10 shrink-0 place-items-center rounded-full bg-secondary text-sm font-semibold">
-          {initials(card.authorName)}
-        </div>
+        {card.avatar ? (
+          <img src={card.avatar} alt="" className="size-10 shrink-0 rounded-full object-cover" />
+        ) : (
+          <div className="grid size-10 shrink-0 place-items-center rounded-full bg-secondary text-sm font-semibold">
+            {initials(card.authorName)}
+          </div>
+        )}
         <div className="min-w-0 flex-1">
           <div className="truncate font-medium leading-tight">{card.authorName}</div>
           {card.handle ? <div className="truncate text-sm text-muted-foreground">{card.handle}</div> : null}

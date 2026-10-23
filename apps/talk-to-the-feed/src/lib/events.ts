@@ -82,13 +82,20 @@ function callFromEvent(state: AppState, event: RealtimeEvent): FunctionCall | nu
   return null;
 }
 
-function errorMessage(event: RealtimeEvent): string {
+export function errorMessage(event: RealtimeEvent): string {
   const nested = event.error;
-  if (typeof nested === "string") return nested;
-  if (nested && typeof nested === "object" && typeof (nested as { message?: unknown }).message === "string") {
-    return (nested as { message: string }).message;
+  if (typeof nested === "string" && nested.trim()) return nested.trim();
+  if (nested && typeof nested === "object") {
+    const record = nested as { message?: unknown; param?: unknown; code?: unknown };
+    const message = typeof record.message === "string" && record.message.trim() ? record.message.trim() : "";
+    const param = typeof record.param === "string" && record.param.trim() ? record.param.trim() : "";
+    const code = typeof record.code === "string" && record.code.trim() ? record.code.trim() : "";
+    const parts = [message || "The realtime session reported an error."];
+    if (param) parts.push(`param: ${param}`);
+    if (code) parts.push(code);
+    return parts.join(" — ");
   }
-  if (typeof event.message === "string") return event.message;
+  if (typeof event.message === "string" && event.message.trim()) return event.message.trim();
   return "The realtime session reported an error.";
 }
 

@@ -129,6 +129,19 @@ describe("realtime events", () => {
     expect(state.lines.at(-1)?.text).toBe("What are people saying?");
   });
 
+  test("a session error keeps the message and the param that failed", () => {
+    const state = reduce(createState(), {
+      type: "event",
+      event: {
+        type: "error",
+        error: { message: "Invalid replace value", param: "session.replace", code: "invalid_value" },
+      },
+    });
+    expect(state.error).toContain("Invalid replace value");
+    expect(state.error).toContain("session.replace");
+    expect(state.error).toContain("invalid_value");
+  });
+
   test("debug logging redacts audio payloads and keeps the event type", () => {
     const summarized = summarizeForDebug({ type: "response.output_audio.delta", delta: "A".repeat(80) });
     expect(summarized.type).toBe("response.output_audio.delta");

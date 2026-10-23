@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { canonicalUrl, sourceFromUrl, urlsNeedingEnrichment } from "@/lib/citations";
-import { reduce, summarizeForDebug } from "@/lib/events";
+import { errorMessage, reduce, summarizeForDebug } from "@/lib/events";
 import { MOCK_COMMENTS, MOCK_ENRICHMENTS, MOCK_TIMELINE } from "@/lib/mock-script";
 import { base64ToPcm16, pcm16ToBase64 } from "@/lib/pcm";
 import { buildSessionUpdate, readClientSecret, realtimeSocketUrl } from "@/lib/session-config";
@@ -126,15 +126,25 @@ export function useSession(mock: boolean) {
           }),
         );
       }
-      socket.send(JSON.stringify({ type: "response.create" }));
+      // The tool turn may already be speaking a lead-in. Wait until that audio
+      // finishes so response.create does not overlap it.
+      await playerRef.current?.whenDrained();
+      const live = wsRef.current;
+      if (!live || live.readyState !== WebSocket.OPEN) return;
+      live.send(JSON.stringify({ type: "response.create" }));
     },
     [apply, enrichUrls],
   );
 
   const onRealtimeEvent = useCallback(
     (event: RealtimeEvent) => {
+      if (event.type === "error") {
+        console.error("[talk-to-the-feed] realtime error", errorMessage(event));
+      }
       if (stateRef.current.debug) {
-        console.log("[talk-to-the-feed]", event.type, summarizeForDebug(event));
+        const summary = summarizeForDebug(event);
+        if (event.type === "error") console.error("[talk-to-the-feed]", event.type, summary);
+        else console.log("[talk-to-the-feed]", event.type, summary);
       }
       const next = apply({ type: "event", event });
       if (next.toolBatch?.length) {

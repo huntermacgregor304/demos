@@ -4,6 +4,7 @@ export class PcmPlayer {
   private ctx: AudioContext | null = null;
   private next = 0;
   private sources: AudioBufferSourceNode[] = [];
+  private cancelDrain: (() => void) | null = null;
 
   private context(): AudioContext {
     if (!this.ctx) this.ctx = new AudioContext();
@@ -33,7 +34,27 @@ export class PcmPlayer {
     };
   }
 
+  whenDrained(): Promise<void> {
+    const ctx = this.ctx;
+    if (!ctx) return Promise.resolve();
+    const remaining = this.next - ctx.currentTime;
+    if (remaining <= 0.02 && this.sources.length === 0) return Promise.resolve();
+    const waitMs = Math.min(60_000, Math.max(0, remaining) * 1000 + 40);
+    return new Promise((resolve) => {
+      const timer = window.setTimeout(() => {
+        this.cancelDrain = null;
+        resolve();
+      }, waitMs);
+      this.cancelDrain = () => {
+        window.clearTimeout(timer);
+        this.cancelDrain = null;
+        resolve();
+      };
+    });
+  }
+
   stop(): void {
+    this.cancelDrain?.();
     for (const source of this.sources) {
       try {
         source.stop();

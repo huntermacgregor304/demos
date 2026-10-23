@@ -78,6 +78,7 @@ export interface Enrichment {
   handle: string;
   text: string;
   thumbnail?: string;
+  avatar?: string;
   provider: EnrichProvider;
   ok: boolean;
 }
@@ -94,6 +95,7 @@ export interface FeedCard {
   handle: string;
   text: string;
   thumbnail?: string;
+  avatar?: string;
   videoTitle?: string;
   likeCount?: number;
   replyCount?: number;

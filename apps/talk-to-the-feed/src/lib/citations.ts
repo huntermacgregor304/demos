@@ -22,6 +22,17 @@ export function stripMarkers(raw: string): string {
     .trim();
 }
 
+export function statusIdFromUrl(raw: string): string | null {
+  try {
+    const parts = new URL(raw).pathname.split("/").filter(Boolean);
+    const index = parts.findIndex((part) => part === "status" || part === "statuses");
+    const id = index >= 0 ? parts[index + 1] ?? "" : "";
+    return /^\d+$/.test(id) ? id : null;
+  } catch {
+    return null;
+  }
+}
+
 export function sourceFromUrl(raw: string): SourceId | "web" {
   try {
     const host = new URL(raw).hostname.toLowerCase().replace(/^www\./, "");
@@ -194,6 +205,7 @@ export function assembleFeed(
         handle: enrichment?.handle || "",
         text: "",
         thumbnail: enrichment?.thumbnail,
+        avatar: enrichment?.avatar,
         contentFrom: "unavailable" as const,
       };
     }
@@ -203,6 +215,7 @@ export function assembleFeed(
       handle: enrichment.handle,
       text: enrichment.text,
       thumbnail: enrichment.thumbnail,
+      avatar: enrichment.avatar,
       contentFrom: enrichment.provider === "opengraph" ? "opengraph" : "oembed",
     };
   });

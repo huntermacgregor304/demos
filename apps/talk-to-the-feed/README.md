@@ -38,10 +38,11 @@ Press **Play sample question**. The Orbit Sneakers story is fictional and labele
    - **Facebook** — server-side `web_search` with `allowed_domains: ["facebook.com"]`.
    - **YouTube** — client function `search_youtube_comments`. The server searches 3 recent videos (`search.list`, `order=date`) and pulls 5 comments each (`commentThreads.list`, `order=relevance`). Results are cached in memory for 15 minutes per normalized query. A search is 100 quota units plus 1 unit per comment thread.
 6. Grok calls `render_story` with the headline, summary, mood splits, questions, and card refs (url, YouTube `comment_id`, spoken cue, and why-tag). The screen does not use post text from that payload.
-7. X and Facebook cards are filled by `POST /api/enrich` (X oEmbed, Open Graph for everything else). YouTube cards are filled from the comment payload the server already fetched. If a preview cannot be loaded, the card keeps the link and does not invent the body.
-8. While Grok speaks, `zxcite1` … `zxcite8` in the audio transcript reveal the matching card. Those tokens are listed in `session.replace` so the docs’ pronunciation map can drop them from the audio while leaving them in the transcript. The visible transcript strips them. A cue match after the headline and summary, or an inline citation url, is the fallback.
+7. X and Facebook cards are filled by `POST /api/enrich`. X text comes from oEmbed. The thumbnail and avatar come from `cdn.syndication.twimg.com/tweet-result` (`mediaDetails[0].media_url_https` and `user.profile_image_url_https`); if that lookup fails, the oEmbed text is kept. Facebook and other pages use Open Graph. HTML previews stop at 500 KB and still parse the bytes already read, because the tags are in `<head>`. YouTube cards are filled from the comment payload the server already fetched. If a preview cannot be loaded, the card keeps the link and does not invent the body.
+8. While Grok speaks, `zxcite1` … `zxcite8` in the audio transcript reveal the matching card. Those tokens are listed in `session.replace` mapped to a single space, so the pronunciation map can drop them from the audio while leaving them in the transcript. The docs say replacement values are spoken and do not say whether a whitespace-only value is accepted. The visible transcript strips them. A cue match after the headline and summary, or an inline citation url, is the fallback.
+9. After custom tool results are sent, the client waits until queued playback has drained before `response.create`, so a spoken lead-in does not overlap the answer.
 
-The debug switch (off by default, or `?debug=1`) logs each realtime event type to the browser console. Audio deltas are redacted so the base64 does not flood the log.
+The debug switch (off by default, or `?debug=1`) logs each realtime event type to the browser console. Audio deltas are redacted so the base64 does not flood the log. A realtime `error` event, including a rejected `session.update`, is also written with `console.error` when the switch is off, and the message, param, and code are shown in the page banner.
 
 ## Facebook
 
@@ -62,9 +63,10 @@ These follow the docs as of the implementation and are called out because this r
 - Browser auth is the `xai-client-secret.` WebSocket subprotocol, and the token is a legal subprotocol value.
 - `session.update` accepts nested `reasoning.effort: "none"` (chosen for snappier speech; the API default is `high`), `turn_detection: { type: null }`, `audio.input.transcription.model: "grok-transcribe"`, and `replace` for the `zxciteN` tokens.
 - Assistant audio arrives as base64 PCM16 on `response.output_audio.delta` (also handled: `response.audio.delta`). Mic audio is sent on `input_audio_buffer.append` as `{ audio }`.
-- Custom tools arrive as `response.function_call_arguments.done` with `name`, `call_id`, and `arguments`. Results go back as `conversation.item.create` / `function_call_output`, then one `response.create`.
+- Custom tools arrive as `response.function_call_arguments.done` with `name`, `call_id`, and `arguments`. Results go back as `conversation.item.create` / `function_call_output`, then one `response.create` after playback of the current turn has drained.
 - The realtime socket does not document a per-word citation event. `render_story` plus transcript markers are the sync path. `response.citations` is treated as the corpus list from the text API (not auto-shown). `annotations` / inline urls are treated as live cites.
-- X post text comes from `https://publish.twitter.com/oembed`. Facebook text comes from Open Graph. Either can fail or omit a thumbnail; the card then shows the link only.
+- X post text comes from `https://publish.twitter.com/oembed`. Media thumbnails come from the syndication `tweet-result` endpoint, which is undocumented relative to the voice docs. Facebook text comes from Open Graph, including when the HTML body is longer than 500 KB. Either preview can fail; the card then shows the link only.
+- `session.replace` values of a single space are accepted. If they are not, the session error banner names `session.replace`.
 - YouTube `order=date` is the “recent” half of “relevant recent.” Comment ranking is `order=relevance`.
 
 ## Out of scope

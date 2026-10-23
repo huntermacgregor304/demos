@@ -43,6 +43,28 @@ export interface OEmbedBody {
   url?: string;
 }
 
+function httpsUrl(value: unknown): string | undefined {
+  if (typeof value !== "string" || !value.trim()) return undefined;
+  try {
+    const url = new URL(value);
+    if (url.protocol !== "https:" && url.protocol !== "http:") return undefined;
+    return url.toString();
+  } catch {
+    return undefined;
+  }
+}
+
+export function mediaFromSyndication(body: unknown): { thumbnail?: string; avatar?: string } {
+  if (!body || typeof body !== "object") return {};
+  const record = body as { mediaDetails?: unknown; user?: unknown };
+  const details = Array.isArray(record.mediaDetails) ? record.mediaDetails : [];
+  const first = details.find((item) => item && typeof item === "object");
+  const thumbnail = first ? httpsUrl((first as { media_url_https?: unknown }).media_url_https) : undefined;
+  const user = record.user && typeof record.user === "object" ? record.user : null;
+  const avatar = user ? httpsUrl((user as { profile_image_url_https?: unknown }).profile_image_url_https) : undefined;
+  return { thumbnail, avatar };
+}
+
 export function enrichmentFromOEmbed(pageUrl: string, body: OEmbedBody): Enrichment {
   const text = textFromOEmbedHtml(body.html ?? "");
   const thumbnail = body.html ? imageFromHtml(body.html) : undefined;
