@@ -29,7 +29,7 @@ export function App() {
             </p>
           </div>
         </div>
-        <TabsList aria-label="Views" className="max-w-full overflow-x-auto">
+        <TabsList aria-label="Views" className="h-auto max-w-full flex-wrap justify-start lg:h-10 lg:flex-nowrap">
           {views.map((view) => {
             const Icon = view.icon;
             return (
@@ -46,7 +46,7 @@ export function App() {
         </div>
       </header>
 
-      <TabsContent value="floor" className="min-h-0 flex-1 overflow-hidden px-4 py-4 lg:px-6">
+      <TabsContent value="floor" className="min-h-0 flex-1 overflow-auto px-4 py-4 xl:overflow-hidden lg:px-6">
         <OrgFloor />
       </TabsContent>
       <TabsContent value="handoff" className="min-h-0 flex-1 overflow-auto px-4 py-4 lg:px-6">
