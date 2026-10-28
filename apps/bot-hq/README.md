@@ -1,0 +1,31 @@
+# Bot HQ
+
+A visual command center for Hunter's bots. The floor, the handoff tape, the lesson cards, and the missing-bot panel all run on bundled sample data.
+
+No API keys. The app does not call the network.
+
+## Run
+
+```bash
+cd apps/bot-hq
+bun install
+bun run dev
+```
+
+Open http://localhost:3000.
+
+## Views
+
+1. **Floor** — org chart. Goku and Queen sit at command. Desks group the rest. Clip Editor reports to YT Master. Tanner, Dude, and Kyle are a loop. Select a bot for the standing order.
+2. **Live handoff** — scout, owner approval, Builder, shipped. Talk to the Feed (Grok Voice 3.0, PR #1) is up and waiting on live keys. Bot HQ is the one being built.
+3. **Lessons** — cards parsed from `src/data/knowledge.sample.md`, a sample of the shared knowledge file.
+4. **Missing bot** — the roster set against a livestream playbook (planner, builder, critic / QA, ops / monitoring, finance, marketing / social, support, research, scheduler). The open ops seat is the next hire.
+
+`tracking/seen-bookmarks.json` at the repo root lists both picks: Grok Voice 3.0 / Talk to the Feed (`apps/talk-to-the-feed`) and Bot HQ.
+
+## Checks
+
+```bash
+bun test
+bun run typecheck
+```

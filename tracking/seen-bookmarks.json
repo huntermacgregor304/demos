@@ -1,0 +1,18 @@
+{
+  "picks": [
+    {
+      "title": "Grok Voice 3.0",
+      "demo": "Talk to the Feed",
+      "app": "apps/talk-to-the-feed"
+    },
+    {
+      "title": "Bot HQ",
+      "demo": "Bot HQ",
+      "app": "apps/bot-hq",
+      "inspiration": [
+        "https://x.com/spectnfa/status/2113646397379469654",
+        "https://x.com/i/status/2112574886421901822"
+      ]
+    }
+  ]
+}
