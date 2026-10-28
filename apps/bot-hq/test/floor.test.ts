@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { buildEnergyField } from "../src/components/space/fieldGeometry";
 import { handoffRoute, labelBoxesClear, minSeparation, nameLabels, orbs, SCENE } from "../src/lib/constellation";
 import { bots, getBot, loopOrder, relationshipLines } from "../src/data/bots";
 import { handoffs, stageVisual, stages } from "../src/data/handoffs";
@@ -64,6 +65,17 @@ describe("constellation", () => {
     expect(building.marker).toBe("building");
     expect(shipped.path).toContain(String(SCENE.cx));
     expect(minSeparation([shipped.end, ...orbs])).toBeGreaterThan(36);
+  });
+});
+
+describe("energy field", () => {
+  test("builds a vortex of luminous threads around the globe", () => {
+    const field = buildEnergyField();
+    expect(field.positions.length).toBeGreaterThan(20000);
+    expect(field.colors.length).toBe(field.positions.length);
+    expect(field.along.length).toBe(field.positions.length / 3);
+    expect(field.pathCount).toBeGreaterThan(100);
+    expect(field.paths.length).toBe(field.pathCount * field.pathLength * 3);
   });
 });
 

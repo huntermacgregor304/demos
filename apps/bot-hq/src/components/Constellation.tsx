@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
+import { SpaceCanvas } from "@/components/space/SpaceCanvas";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -17,7 +18,6 @@ import {
   orbitRadii,
   nameLabels,
   orbs,
-  ribbons,
   type OrbPlacement,
   type PulseId,
 } from "@/lib/constellation";
@@ -41,44 +41,34 @@ export function Constellation() {
   const selected = getBot(selectedId);
   const route = handoffRoute(pulse);
   const hovered = hoverId ? orbs.find((orb) => orb.id === hoverId) : undefined;
+  const svgRef = useRef<SVGSVGElement>(null);
+  const mouse = useRef({ x: 0, y: 0 });
 
   return (
-    <div className="relative h-full min-h-[640px]">
+    <div
+      className="relative h-full min-h-[640px]"
+      onMouseMove={(event) => {
+        if (reduced) return;
+        const bounds = event.currentTarget.getBoundingClientRect();
+        mouse.current.x = ((event.clientX - bounds.left) / bounds.width) * 2 - 1;
+        mouse.current.y = ((event.clientY - bounds.top) / bounds.height) * 2 - 1;
+      }}
+    >
+      <SpaceCanvas svgRef={svgRef} reduced={reduced} mouse={mouse} />
       <svg
+        ref={svgRef}
         viewBox={`0 0 ${SCENE.width} ${SCENE.height}`}
-        className="absolute inset-0 h-full w-full"
+        className="absolute inset-0 z-[1] h-full w-full"
         role="group"
         aria-label="Bot constellation"
       >
         <defs>
-          <radialGradient id="ocean" cx="38%" cy="34%" r="70%">
-            <stop offset="0%" stopColor="#6ec2f0" />
-            <stop offset="38%" stopColor="#1f6fbe" />
-            <stop offset="100%" stopColor="#0a2a58" />
-          </radialGradient>
-          <radialGradient id="sphere-shade" cx="40%" cy="36%" r="68%">
-            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.42" />
-            <stop offset="36%" stopColor="#ffffff" stopOpacity="0" />
-            <stop offset="78%" stopColor="#02101f" stopOpacity="0.05" />
-            <stop offset="100%" stopColor="#020814" stopOpacity="0.78" />
-          </radialGradient>
-          <radialGradient id="atmo" cx="50%" cy="50%" r="50%">
-            <stop offset="70%" stopColor="#7ee0ff" stopOpacity="0" />
-            <stop offset="86%" stopColor="#9ae7ff" stopOpacity="0.35" />
-            <stop offset="100%" stopColor="#d8f6ff" stopOpacity="0" />
-          </radialGradient>
           <linearGradient id="iris" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#fff1b8" />
             <stop offset="22%" stopColor="#7ee0ff" />
             <stop offset="48%" stopColor="#f3b6ff" />
             <stop offset="72%" stopColor="#7dffb0" />
             <stop offset="100%" stopColor="#ffe08a" />
-          </linearGradient>
-          <linearGradient id="iris-b" x1="1" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#ffd27a" />
-            <stop offset="35%" stopColor="#ffffff" />
-            <stop offset="68%" stopColor="#8af0ff" />
-            <stop offset="100%" stopColor="#e7b0ff" />
           </linearGradient>
           {Object.entries(groupStyle).map(([id, style]) => (
             <radialGradient key={id} id={`core-${id}`} cx="34%" cy="30%" r="72%">
@@ -88,14 +78,11 @@ export function Constellation() {
               <stop offset="100%" stopColor="#140c22" />
             </radialGradient>
           ))}
-          <clipPath id="earth-clip">
-            <circle cx={SCENE.cx} cy={SCENE.cy} r={SCENE.earthR} />
-          </clipPath>
         </defs>
 
         <Frame />
         <Geometry reduced={reduced} />
-        <Earth reduced={reduced} />
+        <Earth />
         <HandoffPulse route={route} reduced={reduced} />
 
         {orbs.map((orb) => (
@@ -223,84 +210,17 @@ function Geometry({ reduced }: { reduced: boolean }) {
         opacity="0.4"
         transform={`rotate(45 ${cx} ${cy})`}
       />
-      <g>
-        {!reduced ? (
-          <animateTransform
-            attributeName="transform"
-            type="rotate"
-            from={`0 ${cx} ${cy}`}
-            to={`360 ${cx} ${cy}`}
-            dur="70s"
-            repeatCount="indefinite"
-          />
-        ) : null}
-        <path d={ribbons[0]} fill="none" stroke="url(#iris)" strokeWidth="14" strokeLinecap="round" opacity="0.22" />
-        <path d={ribbons[0]} fill="none" stroke="url(#iris)" strokeWidth="3.4" strokeLinecap="round" opacity="0.9" />
-        <path d={ribbons[2]} fill="none" stroke="url(#iris-b)" strokeWidth="11" strokeLinecap="round" opacity="0.16" />
-        <path d={ribbons[2]} fill="none" stroke="url(#iris-b)" strokeWidth="2.4" strokeLinecap="round" opacity="0.85" />
-      </g>
-      <g>
-        {!reduced ? (
-          <animateTransform
-            attributeName="transform"
-            type="rotate"
-            from={`360 ${cx} ${cy}`}
-            to={`0 ${cx} ${cy}`}
-            dur="96s"
-            repeatCount="indefinite"
-          />
-        ) : null}
-        <path d={ribbons[1]} fill="none" stroke="url(#iris-b)" strokeWidth="16" strokeLinecap="round" opacity="0.16" />
-        <path d={ribbons[1]} fill="none" stroke="url(#iris)" strokeWidth="2.6" strokeLinecap="round" opacity="0.75" />
-        <path d={ribbons[3]} fill="none" stroke="url(#iris)" strokeWidth="9" strokeLinecap="round" opacity="0.14" />
-        <path d={ribbons[3]} fill="none" stroke="#fff6d0" strokeWidth="1.4" strokeLinecap="round" opacity="0.7" />
-      </g>
-      <circle cx={cx} cy={cy} r={292} fill="none" stroke="url(#iris)" strokeWidth="1.4" strokeDasharray="10 18" opacity="0.8">
+      <circle cx={cx} cy={cy} r={292} fill="none" stroke="#e7c98a" strokeWidth="0.8" strokeDasharray="10 18" opacity="0.45">
         {!reduced ? <animate attributeName="stroke-dashoffset" from="0" to="-168" dur="22s" repeatCount="indefinite" /> : null}
       </circle>
     </g>
   );
 }
 
-function Earth({ reduced }: { reduced: boolean }) {
+function Earth() {
   const { cx, cy, earthR } = SCENE;
   return (
     <g data-testid="earth" aria-label="Hunter">
-      <circle cx={cx} cy={cy} r={earthR + 28} fill="url(#atmo)" />
-      <g clipPath="url(#earth-clip)">
-        <circle cx={cx} cy={cy} r={earthR} fill="url(#ocean)" />
-        <g transform={`translate(${cx} ${cy})`}>
-          <path
-            fill="#2f9a46"
-            d="M-22-54C-8-58 6-54 14-46C22-38 28-28 24-16C22-8 26-2 18 2C10 6 8 12 2 12C-6 12-8 4-16 2C-26 0-36-10-40-22C-46-38-38-52-22-54Z"
-          />
-          <path fill="#257f38" d="M8-6C16-4 20 4 16 12C12 18 6 16 4 10C2 4 4-6 8-6Z" />
-          <ellipse cx="22" cy="-40" rx="9" ry="5" fill="#e7fff4" />
-          <path
-            fill="#278a3e"
-            d="M-8 16C2 14 10 22 12 34C14 48 8 64-2 66C-12 68-18 56-18 42C-18 28-16 18-8 16Z"
-          />
-          <path fill="#3caa58" d="M48-8C60-10 68 4 66 20C64 34 54 40 48 28C44 16 42 0 48-8Z" />
-          <path fill="#349652" d="M34-34C46-38 56-26 52-16C46-12 36-18 34-28C32-32 32-32 34-34Z" />
-          <ellipse cx="0" cy="-62" rx="22" ry="7" fill="#e7fff4" opacity="0.8" />
-          <g opacity="0.22" fill="#ffffff">
-            {!reduced ? (
-              <animateTransform
-                attributeName="transform"
-                type="translate"
-                values="-6 0; 8 -2; -6 0"
-                dur="36s"
-                repeatCount="indefinite"
-              />
-            ) : null}
-            <ellipse cx="-16" cy="-8" rx="26" ry="7" transform="rotate(-18)" />
-            <ellipse cx="8" cy="16" rx="20" ry="5" transform="rotate(12)" />
-            <ellipse cx="-6" cy="-28" rx="14" ry="4" />
-          </g>
-        </g>
-        <circle cx={cx} cy={cy} r={earthR} fill="url(#sphere-shade)" />
-      </g>
-      <circle cx={cx} cy={cy} r={earthR + 2} fill="none" stroke="#d9f4ff" strokeWidth="1.4" opacity="0.7" />
       <text x={cx} y={cy + earthR + 22} textAnchor="middle" fill="#f0d78c" fontFamily="Fraunces, serif" fontSize="16">
         Hunter
       </text>
