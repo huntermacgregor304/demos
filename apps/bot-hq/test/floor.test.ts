@@ -1,6 +1,7 @@
 import { describe, expect, test } from "bun:test";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { handoffRoute, labelBoxesClear, minSeparation, nameLabels, orbs, SCENE } from "../src/lib/constellation";
 import { bots, getBot, loopOrder, relationshipLines } from "../src/data/bots";
 import { handoffs, stageVisual, stages } from "../src/data/handoffs";
 import { parseLessons } from "../src/lib/lessons";
@@ -36,6 +37,33 @@ describe("roster", () => {
     expect(getBot("king-jr").advisesOnly).toBe(true);
     expect(getBot("king-jr").job.toLowerCase()).toContain("advises only");
     expect(getBot("queen").staffTo).toBe("goku");
+  });
+});
+
+describe("constellation", () => {
+  test("places every bot once, clear of its neighbors and inside the frame", () => {
+    expect(orbs).toHaveLength(bots.length);
+    expect(new Set(orbs.map((orb) => orb.id))).toEqual(new Set(bots.map((bot) => bot.id)));
+    expect(minSeparation(orbs)).toBeGreaterThan(70);
+    expect(minSeparation(nameLabels)).toBeGreaterThan(36);
+    expect(labelBoxesClear()).toBe(true);
+    for (const orb of orbs) {
+      expect(orb.x).toBeGreaterThan(36);
+      expect(orb.y).toBeGreaterThan(36);
+      expect(orb.x).toBeLessThan(SCENE.width - 36);
+      expect(orb.y).toBeLessThan(SCENE.height - 36);
+    }
+  });
+
+  test("runs the handoff pulse from the scout through Hunter to Builder", () => {
+    const shipped = handoffRoute("talk-to-the-feed");
+    const building = handoffRoute("bot-hq");
+    expect(shipped.path.startsWith("M")).toBe(true);
+    expect(shipped.label).toBe("PR #1");
+    expect(shipped.marker).toBe("shipped");
+    expect(building.marker).toBe("building");
+    expect(shipped.path).toContain(String(SCENE.cx));
+    expect(minSeparation([shipped.end, ...orbs])).toBeGreaterThan(36);
   });
 });
 

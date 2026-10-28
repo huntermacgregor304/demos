@@ -24,7 +24,7 @@ export function HandoffTimeline() {
         ))}
       </div>
 
-      <Card className="bg-card/90">
+      <Card>
         <CardHeader className="gap-3">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
@@ -85,8 +85,8 @@ function ProjectButton({
       aria-pressed={selected}
       onClick={() => onSelect(handoff.id)}
       className={cn(
-        "rounded-xl border p-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        selected ? "border-ice/70 bg-ice/10" : "border-border bg-card hover:border-ice/40",
+        "glass-panel rounded-xl p-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        selected ? "border-brass shadow-[0_0_22px_rgba(240,215,140,0.28)]" : "hover:border-brass/70",
       )}
     >
       <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-muted-foreground">{handoff.kicker}</p>

@@ -24,7 +24,7 @@ export function GapPanel() {
 
   return (
     <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_360px]">
-      <Card className="bg-card/90">
+      <Card>
         <CardHeader>
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-muted-foreground">Livestream playbook</p>
           <CardTitle className="font-serif text-3xl leading-none">Seats a company usually hires</CardTitle>
@@ -55,7 +55,7 @@ export function GapPanel() {
         </CardContent>
       </Card>
 
-      <Card className="h-fit border-brass/50 bg-brass/8">
+      <Card className="h-fit border-brass/70 shadow-[0_0_28px_rgba(240,215,140,0.16)]">
         <CardHeader>
           <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brass">Next bot to add</p>
           <div className="flex items-center gap-3">

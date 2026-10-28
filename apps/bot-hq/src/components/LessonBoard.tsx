@@ -27,7 +27,7 @@ export function LessonBoard() {
       </div>
       <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {lessons.map((lesson) => (
-          <Card key={lesson.id} className="bg-card/90">
+          <Card key={lesson.id}>
             <CardHeader>
               <div className="flex items-center justify-between gap-3">
                 <span className="font-serif text-2xl text-brass">{lesson.n}</span>
