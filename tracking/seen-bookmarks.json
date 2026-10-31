@@ -13,6 +13,25 @@
         "https://x.com/spectnfa/status/2113646397379469654",
         "https://x.com/i/status/2112574886421901822"
       ]
+    },
+    {
+      "title": "Bot Brain",
+      "demo": "Bot Brain",
+      "app": "apps/bot-brain",
+      "inspiration": [
+        "https://x.com/imryven/status/2115936477171392905"
+      ]
+    },
+    {
+      "title": "Night Desk",
+      "demo": "Night Desk",
+      "app": "apps/night-desk",
+      "inspiration": [
+        "https://x.com/gusik4ever/status/2116504471907791240",
+        "https://x.com/Shelpid_WI3M/status/2116162631308333402",
+        "https://x.com/SimonGFarmer/status/2116193665949606339",
+        "https://x.com/0x_fokki/status/2116289885870981296"
+      ]
     }
   ]
 }

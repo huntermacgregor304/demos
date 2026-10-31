@@ -1,0 +1,79 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Figtree", "Avenir Next", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Orbitron", "Eurostile", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --color-background: #0b0f19;
+  --color-foreground: #e7f7ff;
+  --color-card: #12182a;
+  --color-card-foreground: #e7f7ff;
+  --color-popover: #12182a;
+  --color-popover-foreground: #e7f7ff;
+  --color-primary: #3ef0ff;
+  --color-primary-foreground: #041018;
+  --color-secondary: #1a2236;
+  --color-secondary-foreground: #e7f7ff;
+  --color-muted: #151c2e;
+  --color-muted-foreground: #93a4b8;
+  --color-accent: #2a1630;
+  --color-accent-foreground: #ffd6f3;
+  --color-destructive: #ff2bd6;
+  --color-border: #1c4654;
+  --color-input: #1c4654;
+  --color-ring: #3ef0ff;
+  --color-cyan: #3ef0ff;
+  --color-magenta: #ff2bd6;
+  --radius-lg: 0.85rem;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0b0f19;
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+
+.night-grid {
+  background:
+    radial-gradient(900px 420px at 10% -10%, rgb(62 240 255 / 0.14), transparent 60%),
+    radial-gradient(700px 380px at 100% 0%, rgb(255 43 214 / 0.16), transparent 55%),
+    linear-gradient(180deg, rgb(11 15 25 / 0.2), #0b0f19 70%);
+}
+
+.glass-bar {
+  background: linear-gradient(180deg, rgb(11 15 25 / 0.92), rgb(11 15 25 / 0.72));
+  border-bottom: 1px solid rgb(62 240 255 / 0.28);
+  backdrop-filter: blur(16px);
+}
+
+.glass-panel {
+  background: linear-gradient(165deg, rgb(18 28 48 / 0.88), rgb(8 10 18 / 0.82));
+  border: 1px solid rgb(62 240 255 / 0.32);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.03),
+    0 16px 40px rgb(0 0 0 / 0.35),
+    0 0 24px rgb(62 240 255 / 0.06);
+  backdrop-filter: blur(12px);
+}
+
+.speech-bubble {
+  border: 1px solid rgb(62 240 255 / 0.85);
+  background: rgb(8 12 22 / 0.92);
+  box-shadow:
+    0 0 24px rgb(62 240 255 / 0.28),
+    0 12px 30px rgb(0 0 0 / 0.45);
+}
+
+.speech-bubble.bear {
+  border-color: rgb(255 43 214 / 0.9);
+  box-shadow:
+    0 0 24px rgb(255 43 214 / 0.28),
+    0 12px 30px rgb(0 0 0 / 0.45);
+}
