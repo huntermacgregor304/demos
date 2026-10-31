@@ -1,0 +1,31 @@
+{
+  "bookmarks": [
+    {
+      "id": "2115936477171392905",
+      "title": "Ryven Second Brain Post",
+      "url": "https://x.com/imryven/status/2115936477171392905",
+      "author": "imryven",
+      "author_name": "Ryven",
+      "created_at": "2026-10-29T22:39:03.000Z",
+      "text": "I still don’t understand why people keep building a Claude second brain from scratch when these 10 repos already built the whole system. They take in your sources, link them into a wiki, check every claim, and one of them runs fully on your own machine. 10 LLM_Wiki_SecondBrain runs the whole pipeline on a local model, with no cloud API."
+    },
+    {
+      "id": "sample-local-vault",
+      "title": "Local Vault Note",
+      "url": "https://example.com/notes/local-vault",
+      "author": "samplekeeper",
+      "author_name": "Sample Keeper",
+      "created_at": "2026-10-01T00:00:00.000Z",
+      "text": "A local vault stores sources as Markdown you own, and wikilinks resolve to notes on disk without an API key."
+    },
+    {
+      "id": "sample-claim-check",
+      "title": "Claim Check Note",
+      "url": "https://example.com/notes/claim-check",
+      "author": "samplekeeper",
+      "author_name": "Sample Keeper",
+      "created_at": "2026-10-02T00:00:00.000Z",
+      "text": "A claim check marks a sentence sourced only when it points at a note or a URL that contains the claim."
+    }
+  ]
+}
