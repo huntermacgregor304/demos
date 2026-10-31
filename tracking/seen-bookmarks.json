@@ -13,6 +13,14 @@
         "https://x.com/spectnfa/status/2113646397379469654",
         "https://x.com/i/status/2112574886421901822"
       ]
+    },
+    {
+      "title": "Bot Brain",
+      "demo": "Bot Brain",
+      "app": "apps/bot-brain",
+      "inspiration": [
+        "https://x.com/imryven/status/2115936477171392905"
+      ]
     }
   ]
 }

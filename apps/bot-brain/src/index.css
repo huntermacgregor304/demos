@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Figtree", "Avenir Next", "Segoe UI", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+  --color-background: #0b0f19;
+  --color-foreground: #e7fbff;
+  --color-card: #101828;
+  --color-card-foreground: #e7fbff;
+  --color-popover: #101828;
+  --color-popover-foreground: #e7fbff;
+  --color-primary: #3ef0ff;
+  --color-primary-foreground: #041016;
+  --color-secondary: #1a1030;
+  --color-secondary-foreground: #e7fbff;
+  --color-muted: #12182a;
+  --color-muted-foreground: #9fb0c9;
+  --color-accent: #241033;
+  --color-accent-foreground: #ffd6f6;
+  --color-destructive: #ff2bd6;
+  --color-border: #2a3a55;
+  --color-input: #2a3a55;
+  --color-ring: #3ef0ff;
+  --color-cyan: #3ef0ff;
+  --color-magenta: #ff2bd6;
+  --radius-lg: 0.85rem;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #0b0f19;
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+}
+
+.brain-shell {
+  background-color: #0b0f19;
+  background-image:
+    radial-gradient(900px 520px at 8% -10%, rgba(62, 240, 255, 0.14), transparent 55%),
+    radial-gradient(720px 480px at 100% 110%, rgba(255, 43, 214, 0.14), transparent 50%),
+    linear-gradient(rgba(62, 240, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(62, 240, 255, 0.04) 1px, transparent 1px);
+  background-size: auto, auto, 48px 48px, 48px 48px;
+}
+
+.glass-panel {
+  background: linear-gradient(165deg, rgb(16 24 40 / 0.92), rgb(11 15 25 / 0.88));
+  border: 1px solid rgb(62 240 255 / 0.35);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.03),
+    0 18px 50px rgb(0 0 0 / 0.35);
+  backdrop-filter: blur(16px);
+}
